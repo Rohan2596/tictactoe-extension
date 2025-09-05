@@ -11,5 +11,7 @@
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
-  }
+  },
+  "short_name": "TicTacToe",
+  "privacy_policy": "https://github.com/Rohan2596/tictactoe-extension/privacy.html"
 }
