@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Tic-Tac-Toe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- MV3 uses extension CSP; no inline scripts. External network requests are not used. -->
+  <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+  <canvas id="confettiCanvas" class="confetti"></canvas>
+  <main class="container">
+    <header class="header">
+      <h1 id="title">Play Tic-Tac-Toe</h1>
+      <ol id="instructions">
+        <li>Select an empty square to place your mark.</li>
+        <li>Players take turns: X goes first.</li>
+        <li>
+          Current turn:
+          <span id="currentPlayerText" aria-live="polite">X</span>
+        </li>
+        <li>The first player to get 3 in a row wins.</li>
+        <li>Click “Reset” to start a new game anytime.</li>
+      </ol>
+    </header>
+
+    <section id="board" class="board" role="grid" aria-labelledby="title" aria-describedby="instructions">
+      <!-- 9 cells, rendered as buttons for keyboard + screen reader support -->
+      <button class="cell" role="gridcell" aria-label="Cell 1, empty" data-index="0"></button>
+      <button class="cell" role="gridcell" aria-label="Cell 2, empty" data-index="1"></button>
+      <button class="cell" role="gridcell" aria-label="Cell 3, empty" data-index="2"></button>
+
+      <button class="cell" role="gridcell" aria-label="Cell 4, empty" data-index="3"></button>
+      <button class="cell" role="gridcell" aria-label="Cell 5, empty" data-index="4"></button>
+      <button class="cell" role="gridcell" aria-label="Cell 6, empty" data-index="5"></button>
+
+      <button class="cell" role="gridcell" aria-label="Cell 7, empty" data-index="6"></button>
+      <button class="cell" role="gridcell" aria-label="Cell 8, empty" data-index="7"></button>
+      <button class="cell" role="gridcell" aria-label="Cell 9, empty" data-index="8"></button>
+    </section>
+
+    <section class="status-row">
+      <div id="status" class="status" role="status" aria-live="polite">Your move: X</div>
+      <button id="resetBtn" class="reset" type="button" aria-label="Reset game">Reset</button>
+    </section>
+
+    <footer class="footer">
+      <small>No permissions. Works offline.</small>
+      <small>Powered By Rohan Kadam</small>
+    </footer>
+  </main>
+
+  <script src="popup.js"></script>  
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Play Tic-Tac-Toe Game",
+  "version": "1.0.0",
+  "description": "A lightweight, accessible Tic-Tac-Toe game that works offline. No permissions. Fun animations when you win or draw!",
+  "action": {
+    "default_title": "Play Tic-Tac-Toe",
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
