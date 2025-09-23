@@ -2,9 +2,9 @@
   "manifest_version": 3,
   "name": "Tic-Tac-Toe Game",
   "version": "1.0.0",
-  "description": "A lightweight, accessible Tic-Tac-Toe game that works offline. No permissions. Fun animations when you win or draw!",
+  "description": "Play a fun, classic Tic-Tac-Toe game offline with no permissions. Smooth animations when you win or draw.",
   "action": {
-    "default_title": "Play Tic-Tac-Toe",
+    "default_title": "Play Tic-Tac-Toe - No Permissions Needed",
     "default_popup": "popup.html"
   },
   "icons": {
@@ -12,6 +12,5 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "short_name": "TicTacToe",
-  "privacy_policy": "https://rohan2596.github.io/tictactoe-extension/privacy.html"
+  "short_name": "TicTacToe"
 }
