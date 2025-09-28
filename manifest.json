@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Tic-Tac-Toe Game",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Play a fun, classic Tic-Tac-Toe game offline with no permissions. Smooth animations when you win or draw.",
   "action": {
     "default_title": "Play Tic-Tac-Toe - No Permissions Needed",
