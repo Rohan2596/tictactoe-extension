@@ -169,56 +169,59 @@
 
   // --- CONFETTI EFFECT (Inside Scope) ---
   function launchConfetti(result) {
-    const canvas = document.getElementById("confettiCanvas");
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+  const canvas = document.getElementById("confettiCanvas");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
 
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+  // Fix: Sync canvas internal resolution with its CSS display size
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 
-    const palettes = {
-      X: ["#38bdf8", "#0ea5e9", "#7dd3fc"], // Blues for X
-      O: ["#f472b6", "#ec4899", "#f9a8d4"], // Pinks for O
-      draw: ["#facc15", "#fde68a", "#e5e7eb"]
-    };
+  const palettes = {
+    X: ["#F87171", "#ef4444", "#dc2626"], // Coral Red palette from icon
+    O: ["#34D399", "#10b981", "#059669"], // Mint Green palette from icon
+    draw: ["#EAB308", "#facc15", "#fef08a"] // Gold palette from icon
+  };
 
-    const colors = palettes[result] || ["#a855f7", "#f43f5e"];
-    const pieces = [];
-    
-    for (let i = 0; i < 80; i++) {
-      pieces.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height - canvas.height,
-        w: 8,
-        h: 12,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        speed: 2 + Math.random() * 3,
-        tilt: Math.random() * 10 - 5
-      });
-    }
-
-    let frame = 0;
-    function loop() {
-      frame++;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      pieces.forEach(p => {
-        p.y += p.speed;
-        ctx.fillStyle = p.color;
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate((p.tilt * Math.PI) / 180);
-        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
-        ctx.restore();
-      });
-
-      if (frame < 150) {
-        requestAnimationFrame(loop);
-      } else {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
-    }
-    loop();
+  const colors = palettes[result] || ["#EAB308", "#F87171", "#34D399"];
+  const pieces = [];
+  
+  for (let i = 0; i < 100; i++) {
+    pieces.push({
+      x: Math.random() * canvas.width,
+      y: -20, // Start just above the view
+      w: Math.random() * 8 + 4,
+      h: Math.random() * 10 + 6,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      speed: 3 + Math.random() * 4,
+      tilt: Math.random() * 20 - 10
+    });
   }
+
+  let frame = 0;
+  function loop() {
+    frame++;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    pieces.forEach(p => {
+      p.y += p.speed;
+      p.tilt += 0.1;
+      ctx.fillStyle = p.color;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.tilt);
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    });
+
+    if (frame < 200) {
+      requestAnimationFrame(loop);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+  loop();
+}
 
   // Initialize UI
   render();
