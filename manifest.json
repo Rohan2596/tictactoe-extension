@@ -1,16 +1,25 @@
 {
   "manifest_version": 3,
-  "name": "Tic-Tac-Toe Game",
-  "version": "1.0.1",
-  "description": "Play a fun, classic Tic-Tac-Toe game offline with no permissions. Smooth animations when you win or draw.",
+  "name": "Tic Tac Toe Online: Classic XO Game & 2 Player Mode",
+  "version": "1.2.0",
+  "description": "Play the ultimate Tic Tac Toe (XO) game. Challenge a smart AI or play 2-player mode with friends. Fast, free, and works offline!",
+  "short_name": "TicTacToe XO",
+  "permissions": [
+    "sidePanel"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
-    "default_title": "Play Tic-Tac-Toe - No Permissions Needed",
-    "default_popup": "popup.html"
+    "default_title": "Click to play Tic Tac Toe"
+  },
+  "side_panel": {
+    "default_path": "popup.html"
   },
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "short_name": "TicTacToe"
+  "offline_enabled": true
 }

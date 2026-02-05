@@ -2,53 +2,96 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Privacy Policy - Tic-Tac-Toe Extension</title>
+  <title>Privacy Policy - Tic Tac Toe Online: Classic XO</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 720px; margin: 2rem auto; line-height: 1.6; }
-    h1 { font-size: 1.5rem; }
-    h2 { margin-top: 1.5rem; font-size: 1.2rem; }
+    :root { 
+      --bg: #ffffff;
+      --text: #374151; 
+      --heading: #111827; 
+      --accent: #2563eb; 
+    }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+      max-width: 800px; 
+      margin: 3rem auto; 
+      line-height: 1.7; 
+      color: var(--text); 
+      padding: 0 20px; 
+      background-color: var(--bg);
+    }
+    h1 { font-size: 2rem; color: var(--heading); border-bottom: 2px solid #e5e7eb; padding-bottom: 10px; }
+    h2 { margin-top: 2rem; font-size: 1.3rem; color: var(--heading); }
+    .callout { 
+      background: #f0f9ff; 
+      padding: 20px; 
+      border-left: 5px solid var(--accent); 
+      border-radius: 6px; 
+      margin: 20px 0;
+    }
+    ul { padding-left: 1.5rem; }
+    a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    a:hover { text-decoration: underline; }
+    footer { 
+      margin-top: 4rem; 
+      font-size: 0.85rem; 
+      color: #6b7280; 
+      border-top: 1px solid #e5e7eb; 
+      padding-top: 20px; 
+      text-align: center;
+    }
   </style>
 </head>
 <body>
   <h1>Privacy Policy</h1>
+  <p><strong>Effective Date:</strong> February 5, 2026</p>
+  
+  <div class="callout">
+    <strong>Privacy Commitment:</strong> This extension is built with a "Privacy-First" philosophy. We believe your gaming habits should remain yours alone. This extension does not track you, profile you, or transmit your data.
+  </div>
+
+  <h2>1. Data Collection & Handling</h2>
   <p>
-    Your privacy is important. This Tic-Tac-Toe Chrome Extension has been designed with
-    simplicity and user safety in mind. This page explains how your data is handled.
+    <strong>Tic Tac Toe Online: Classic XO Game</strong> is a client-side application. 
+  </p>
+  <ul>
+    <li><strong>No Personal Data:</strong> We do not collect names, email addresses, IP addresses, or any other personal identifiers.</li>
+    <li><strong>Local Storage only:</strong> All game states (current board, score, and game mode) are processed locally within your browser's temporary memory. This data is not synced to the cloud and is cleared when the session ends.</li>
+  </ul>
+
+  <h2>2. Browser Permissions (Manifest V3)</h2>
+  <p>
+    We only request the minimum permissions necessary for the extension to function:
+  </p>
+  <ul>
+    <li><strong>sidePanel:</strong> This permission is used exclusively to allow users to play the game in Chrome's side panel, facilitating a better multitasking experience. It does not allow us to see your browsing activity.</li>
+  </ul>
+
+  <h2>3. AI Processing</h2>
+  <p>
+    The "Vs AI" mode utilizes a local <strong>Minimax Algorithm</strong>. All decision-making calculations are performed on your local machine's CPU. No data is sent to external servers for AI computation.
   </p>
 
-  <h2>Data Collection</h2>
+  <h2>4. Third-Party Disclosure</h2>
   <p>
-    This extension does <strong>not</strong> collect, store, or share any personal information
-    or user data. All gameplay happens entirely within your browser and works offline.
+    We do not sell, trade, or otherwise transfer your information to outside parties. This extension contains no third-party advertisements, tracking pixels, or analytics scripts (such as Google Analytics).
   </p>
 
-  <h2>Permissions</h2>
+  <h2>5. Compliance</h2>
   <p>
-    The extension requires <strong>no special permissions</strong>. It does not access your browsing history,
-    personal files, or any online resources.
+    This extension complies with the <strong>Google Web Store Developer Terms of Service</strong> and the <strong>User Data Privacy Policy</strong>.
   </p>
 
-  <h2>Offline Use</h2>
+  <h2>6. Contact</h2>
   <p>
-    The extension is fully functional without an internet connection. No data is transmitted to any server.
+    If you have any questions regarding this Privacy Policy, please contact the developer:
+  </p>
+  <p>
+    <strong>Rohan Ravindra Kadam</strong><br>
+    Email: <a href="mailto:rohankadam2596@gmail.com">rohankadam2596@gmail.com</a>
   </p>
 
-  <h2>Third Parties</h2>
-  <p>
-    No data is sold, shared, or transferred to any third parties. The extension contains no advertising,
-    analytics, or tracking scripts.
-  </p>
-
-  <h2>Updates</h2>
-  <p>
-    If this extension is updated in the future, and if any data-related functionality is introduced,
-    this privacy policy will be updated accordingly, and users will be notified via the Chrome Web Store.
-  </p>
-
-  <h2>Contact</h2>
-  <p>
-    If you have any questions about this privacy policy or the extension itself, you can contact the developer at:
-    <a href="mailto:rohankadam2596@gmail.com">rohankadam2596@gmail.com</a>
-  </p>
+  <footer>
+    &copy; 2026 Tic Tac Toe Online Extension. Built for speed and privacy.
+  </footer>
 </body>
 </html>

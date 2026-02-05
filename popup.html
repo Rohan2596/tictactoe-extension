@@ -1,58 +1,55 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
-  <title>Tic-Tac-Toe</title>
+  <title>Tic Tac Toe Online - Classic XO Game</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- MV3 uses extension CSP; no inline scripts. External network requests are not used. -->
   <link rel="stylesheet" href="popup.css" />
 </head>
-
 <body>
   <canvas id="confettiCanvas" class="confetti"></canvas>
+  
   <main class="container">
     <header class="header">
-      <h1 id="title">Play Tic-Tac-Toe</h1>
-      <ol id="instructions">
-        <li>Select an empty square to place your mark.</li>
-        <li>Players take turns: X goes first.</li>
-        <li>
-          Current turn:
-          <span id="currentPlayerText" aria-live="polite">X</span>
-        </li>
-        <li>The first player to get 3 in a row wins.</li>
-        <li>Click “Reset” to start a new game anytime.</li>
-      </ol>
+      <h1 id="title">Tic Tac Toe <span>XO</span></h1>
+      
+      <div class="mode-selector">
+        <button id="pvaBtn" class="active">Vs AI</button>
+        <button id="pvpBtn">2 Players</button>
+      </div>
+
+      <div class="turn-indicator">
+        Player Turn: <span id="currentPlayerText" class="x-turn">X</span>
+      </div>
     </header>
 
-    <section id="board" class="board" role="grid" aria-labelledby="title" aria-describedby="instructions">
-      <!-- 9 cells, rendered as buttons for keyboard + screen reader support -->
-      <button class="cell" role="gridcell" aria-label="Cell 1, empty" data-index="0"></button>
-      <button class="cell" role="gridcell" aria-label="Cell 2, empty" data-index="1"></button>
-      <button class="cell" role="gridcell" aria-label="Cell 3, empty" data-index="2"></button>
-
-      <button class="cell" role="gridcell" aria-label="Cell 4, empty" data-index="3"></button>
-      <button class="cell" role="gridcell" aria-label="Cell 5, empty" data-index="4"></button>
-      <button class="cell" role="gridcell" aria-label="Cell 6, empty" data-index="5"></button>
-
-      <button class="cell" role="gridcell" aria-label="Cell 7, empty" data-index="6"></button>
-      <button class="cell" role="gridcell" aria-label="Cell 8, empty" data-index="7"></button>
-      <button class="cell" role="gridcell" aria-label="Cell 9, empty" data-index="8"></button>
+    <section id="board" class="board" role="grid">
+      <button class="cell" data-index="0" aria-label="Top Left"></button>
+      <button class="cell" data-index="1" aria-label="Top Middle"></button>
+      <button class="cell" data-index="2" aria-label="Top Right"></button>
+      <button class="cell" data-index="3" aria-label="Middle Left"></button>
+      <button class="cell" data-index="4" aria-label="Middle Middle"></button>
+      <button class="cell" data-index="5" aria-label="Middle Right"></button>
+      <button class="cell" data-index="6" aria-label="Bottom Left"></button>
+      <button class="cell" data-index="7" aria-label="Bottom Middle"></button>
+      <button class="cell" data-index="8" aria-label="Bottom Right"></button>
     </section>
 
     <section class="status-row">
-      <div id="status" class="status" role="status" aria-live="polite">Your move: X</div>
-      <button id="resetBtn" class="reset" type="button" aria-label="Reset game">Reset</button>
+      <div id="status" class="status" role="status">Your turn, X</div>
+      <button id="resetBtn" class="reset" type="button">New Game</button>
     </section>
 
     <footer class="footer">
-      <small>No permissions. Works offline.</small>
-      <small>Powered By Rohan Ravindra Kadam</small>
+      <div class="cta-links">
+        <a href="https://chromewebstore.google.com/detail/obdckjmdbfhibbpmgeojjldaogoagchi/reviews" target="_blank" class="rate-link">⭐ Rate 5-Stars</a>
+      </div>
+      <div class="branding">
+        <small>v1.2.0 • Offline Mode • By Rohan Ravindra Kadam</small>
+      </div>
     </footer>
   </main>
 
-  <script src="popup.js"></script>  
+  <script src="popup.js"></script> 
 </body>
-
 </html>

@@ -1,92 +1,137 @@
 (() => {
   "use strict";
 
+  // DOM Elements
   const boardEl = document.getElementById("board");
   const statusEl = document.getElementById("status");
   const resetBtn = document.getElementById("resetBtn");
   const currentPlayerText = document.getElementById("currentPlayerText");
+  const pvaBtn = document.getElementById("pvaBtn");
+  const pvpBtn = document.getElementById("pvpBtn");
 
-  /** Game state */
-  let board = Array(9).fill(null); // indices 0..8
+  // Game State
+  let board = Array(9).fill(null);
   let current = "X";
   let gameOver = false;
+  let gameMode = "AI"; // Default trend: VS AI
 
-  /** All win lines */
   const LINES = [
     [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
     [0, 3, 6], [1, 4, 7], [2, 5, 8], // cols
-    [0, 4, 8], [2, 4, 6]           // diags
+    [0, 4, 8], [2, 4, 6]            // diags
   ];
 
   function updateStatus(text) {
     statusEl.textContent = text;
   }
 
-  function setAria(cellBtn, index, value) {
-    const pos = index + 1;
-    const state = value ? (value === "X" ? "X" : "O") : "empty";
-    cellBtn.setAttribute("aria-label", `Cell ${pos}, ${state}`);
-  }
-
   function render() {
-    // reflect board -> UI
     [...boardEl.querySelectorAll(".cell")].forEach((btn, i) => {
       const val = board[i];
-      btn.textContent = val ? val : "";
-      btn.classList.toggle("x", val === "X");
-      btn.classList.toggle("o", val === "O");
-      setAria(btn, i, val);
+      btn.textContent = val || "";
+      // Modern styling classes
+      btn.className = `cell ${val ? val.toLowerCase() : ""}`;
+      btn.disabled = !!val || gameOver;
+      
+      // Accessibility update
+      const state = val ? val : "empty";
+      btn.setAttribute("aria-label", `Cell ${i + 1}, ${state}`);
     });
 
     currentPlayerText.textContent = current;
+    currentPlayerText.className = `${current.toLowerCase()}-turn`;
   }
 
-  function winner() {
-    for (const [a, b, c] of LINES) {
-      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-        return board[a];
-      }
+  function checkWinner(b) {
+    for (const [a, b_idx, c] of LINES) {
+      if (b[a] && b[a] === b[b_idx] && b[a] === b[c]) return b[a];
     }
+    if (b.every(cell => cell !== null)) return "draw";
     return null;
   }
 
-  function isDraw() {
-    return board.every(Boolean);
+  // --- MINIMAX AI (SEO Trend: Unbeatable Mode) ---
+  function minimax(newBoard, player) {
+    const availSpots = newBoard.map((v, i) => v === null ? i : null).filter(v => v !== null);
+    const result = checkWinner(newBoard);
+
+    if (result === "X") return { score: -10 };
+    if (result === "O") return { score: 10 };
+    if (result === "draw") return { score: 0 };
+
+    const moves = [];
+    for (let i = 0; i < availSpots.length; i++) {
+      const move = {};
+      move.index = availSpots[i];
+      newBoard[availSpots[i]] = player;
+
+      if (player === "O") {
+        move.score = minimax(newBoard, "X").score;
+      } else {
+        move.score = minimax(newBoard, "O").score;
+      }
+
+      newBoard[availSpots[i]] = null;
+      moves.push(move);
+    }
+
+    let bestMove;
+    if (player === "O") {
+      let bestScore = -10000;
+      for (let i = 0; i < moves.length; i++) {
+        if (moves[i].score > bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    } else {
+      let bestScore = 10000;
+      for (let i = 0; i < moves.length; i++) {
+        if (moves[i].score < bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    }
+    return moves[bestMove];
   }
 
-  function handleMove(index, btn) {
+  function handleMove(index) {
     if (gameOver || board[index]) return;
 
     board[index] = current;
-    btn.textContent = current;
-    btn.classList.add(current.toLowerCase());
-    setAria(btn, index, current);
+    render();
 
-    const w = winner();
-    if (w) {
-      gameOver = true;
-      updateStatus(`Winner: ${w}! 🎉`);
-      boardEl.setAttribute("aria-label", `Game over. Winner ${w}.`);
-      launchConfetti(w); // pass "X" or "O"
-      setTimeout(reset, 3000);
-      [...boardEl.querySelectorAll(".cell")].forEach(btn => btn.disabled = true);
+    const result = checkWinner(board);
+    if (result) {
+      handleGameOver(result);
       return;
     }
 
-
-    if (isDraw()) {
-      gameOver = true;
-      updateStatus("It's a draw! 🤝");
-      boardEl.setAttribute("aria-label", "Game over. It's a draw.");
-      launchConfetti("draw"); // special palette
-      setTimeout(reset, 3000);
-      [...boardEl.querySelectorAll(".cell")].forEach(btn => btn.disabled = true);
-      return;
-    }
-
+    // Switch turns
     current = current === "X" ? "O" : "X";
-    currentPlayerText.textContent = current;
-    updateStatus(`Your move: ${current}`);
+    
+    if (gameMode === "AI" && current === "O") {
+      updateStatus("AI is thinking...");
+      setTimeout(() => {
+        const bestMove = minimax(board, "O");
+        if (bestMove) handleMove(bestMove.index);
+      }, 500); // 2026 UX: Small delay makes AI feel "real"
+    } else {
+      updateStatus(`Your move: ${current}`);
+    }
+  }
+
+  function handleGameOver(result) {
+    gameOver = true;
+    if (result === "draw") {
+      updateStatus("It's a draw! 🤝");
+      launchConfetti("draw");
+    } else {
+      updateStatus(`${result} Wins! 🎉`);
+      launchConfetti(result);
+    }
+    render();
   }
 
   function reset() {
@@ -94,127 +139,88 @@
     current = "X";
     gameOver = false;
     updateStatus("Your move: X");
-    boardEl.setAttribute("aria-label", "New game started.");
-    [...boardEl.querySelectorAll(".cell")].forEach(btn => btn.disabled = false);
     render();
   }
 
-  /** Event bindings (click + keyboard) */
-  boardEl.addEventListener("click", (e) => {
-    const btn = e.target.closest(".cell");
-    if (!btn) return;
-    const index = Number(btn.dataset.index);
-    handleMove(index, btn);
+  // --- MODE TOGGLES ---
+  pvaBtn.addEventListener("click", () => {
+    gameMode = "AI";
+    pvaBtn.classList.add("active");
+    pvpBtn.classList.remove("active");
+    reset();
   });
 
-  // Keyboard play with arrows + Enter/Space for activation
-  boardEl.addEventListener("keydown", (e) => {
-    const cells = [...boardEl.querySelectorAll(".cell")];
-    const active = document.activeElement;
-    const idx = cells.indexOf(active);
-    if (idx === -1) return;
+  pvpBtn.addEventListener("click", () => {
+    gameMode = "PVP";
+    pvpBtn.classList.add("active");
+    pvaBtn.classList.remove("active");
+    reset();
+  });
 
-    const row = Math.floor(idx / 3);
-    const col = idx % 3;
-
-    switch (e.key) {
-      case "ArrowUp":
-        e.preventDefault();
-        if (row > 0) cells[(row - 1) * 3 + col].focus();
-        break;
-      case "ArrowDown":
-        e.preventDefault();
-        if (row < 2) cells[(row + 1) * 3 + col].focus();
-        break;
-      case "ArrowLeft":
-        e.preventDefault();
-        if (col > 0) cells[row * 3 + (col - 1)].focus();
-        break;
-      case "ArrowRight":
-        e.preventDefault();
-        if (col < 2) cells[row * 3 + (col + 1)].focus();
-        break;
-      case "Enter":
-      case " ":
-        e.preventDefault();
-        handleMove(idx, active);
-        break;
+  // --- EVENT LISTENERS ---
+  boardEl.addEventListener("click", (e) => {
+    const btn = e.target.closest(".cell");
+    if (btn && !btn.disabled && !gameOver) {
+      handleMove(Number(btn.dataset.index));
     }
   });
 
   resetBtn.addEventListener("click", reset);
 
-  // Initialize: focus first cell for keyboard discoverability
-  render();
-  const firstCell = boardEl.querySelector('.cell[data-index="0"]');
-  if (firstCell) firstCell.focus();
-})();
-/** Unified confetti effect (X, O, or Draw) **/
-function launchConfetti(result) {
-  const canvas = document.getElementById("confettiCanvas");
-  if (!canvas) return;
-  const ctx = canvas.getContext("2d");
+  // --- CONFETTI EFFECT (Inside Scope) ---
+  function launchConfetti(result) {
+    const canvas = document.getElementById("confettiCanvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
 
-  canvas.width = canvas.offsetWidth;
-  canvas.height = canvas.offsetHeight;
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
 
-// Palettes: X wins (red), O wins (green), Draw (gold/neutral)
-const palettes = {
-  X: ["#ef4444", "#f87171", "#b91c1c"],     // reds for X
-  O: ["#22c55e", "#4ade80", "#15803d"],     // greens for O
-  draw: ["#facc15", "#fde68a", "#e5e7eb"]   // gold + light neutral
-};
+    const palettes = {
+      X: ["#38bdf8", "#0ea5e9", "#7dd3fc"], // Blues for X
+      O: ["#f472b6", "#ec4899", "#f9a8d4"], // Pinks for O
+      draw: ["#facc15", "#fde68a", "#e5e7eb"]
+    };
 
-  const colors = palettes[result] || ["#a855f7", "#f43f5e", "#facc15"]; // fallback rainbow
-
-  const pieces = [];
-  for (let i = 0; i < 100; i++) {
-    pieces.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height - canvas.height,
-      w: 8,
-      h: 14,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      speed: 2 + Math.random() * 3,
-      tilt: Math.random() * 10 - 5
-    });
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    pieces.forEach(p => {
-      ctx.fillStyle = p.color;
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate((p.tilt * Math.PI) / 180);
-      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
-      ctx.restore();
-    });
-  }
-
-  function update() {
-    pieces.forEach(p => {
-      p.y += p.speed;
-      if (p.y > canvas.height) {
-        p.y = -10;
-        p.x = Math.random() * canvas.width;
-      }
-    });
-  }
-
-  let frame = 0;
-  function loop() {
-    frame++;
-    draw();
-    update();
-    if (frame < 200) {
-      requestAnimationFrame(loop);
-    } else {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const colors = palettes[result] || ["#a855f7", "#f43f5e"];
+    const pieces = [];
+    
+    for (let i = 0; i < 80; i++) {
+      pieces.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        w: 8,
+        h: 12,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        speed: 2 + Math.random() * 3,
+        tilt: Math.random() * 10 - 5
+      });
     }
+
+    let frame = 0;
+    function loop() {
+      frame++;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pieces.forEach(p => {
+        p.y += p.speed;
+        ctx.fillStyle = p.color;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.tilt * Math.PI) / 180);
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        ctx.restore();
+      });
+
+      if (frame < 150) {
+        requestAnimationFrame(loop);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+    loop();
   }
 
-  loop();
-}
+  // Initialize UI
+  render();
 
-
+})(); // End of IIFE
